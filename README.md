@@ -25,7 +25,11 @@ npm run test # in another terminal
 
 - Maximum of `100` secret retrievals per request
 - Maximum request body size of `100kb` (default of `express.json()`)
+- Rate limiting (although this is ideally handled at infra-level)
+- Content-type sanity checking
+- Security header best-practices (via `helmet`)
+- Catching and exiting process on `uncaughtException` and `unhandledRejection`
 
 ---
 
-_Jeremy Gayed for Doppler_
+_Jeremy Gayed_

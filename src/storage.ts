@@ -15,7 +15,7 @@ export async function dbGet(entry: string): Promise<string> {
   if (value) {
     return Promise.resolve(value);
   } else {
-    return Promise.reject(new Error(`No record found for ${entry}`));
+    return Promise.reject(`No record found for ${entry}`);
   }
 }
 
