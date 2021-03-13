@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { deleteSecret, getSecret, setSecret } from "./tokens";
 
 const MAX_REQ = 100; // max tokens to GET per request
@@ -85,4 +85,34 @@ export function deleteToken(req: Request, res: Response): void {
 
   deleteSecret(req.params.token);
   return res.sendStatus(204).end();
+}
+
+/**
+ * General error handling middleware
+ *
+ * @param err The error that occurred
+ * @param res In production, no error details in response. In dev full error info.
+ */
+export function errorHandling(
+  err: Error,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+): Response {
+  // general error handling middleware
+  console.error(err); // in practice, these should update metrics somewhere
+  res.status(500);
+
+  if (process.env.NODE_ENV === "production") {
+    return res.send("Sorry, an error occurred");
+  }
+
+  return res.send(`
+    <html>
+      <body>
+        <h1>${err.name + " " + err.message}</h1>
+        <pre>${err.stack}</pre>
+      </body>
+    </html>
+  `);
 }
