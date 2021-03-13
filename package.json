@@ -1,0 +1,20 @@
+{
+  "name": "jgayed-doppler",
+  "version": "1.0.0",
+  "description": "Doppler take-home",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "tsc && node build/index.js",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Jeremy Gayed (https://github.com/tizmagik)",
+  "license": "ISC",
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.0",
+    "@types/node": "^14.14.34",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.3"
+  }
+}
