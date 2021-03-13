@@ -1,6 +1,6 @@
 import express from "express";
 import type { Server } from "http";
-import { deleteToken, getTokens, postToken } from "./middleware";
+import { deleteToken, getSecrets, postToken } from "./middleware";
 
 export async function server(): Promise<Server> {
   const { PORT = "8080" } = process.env;
@@ -10,7 +10,7 @@ export async function server(): Promise<Server> {
 
   app.use(express.json()); // 100KB request body size limit (by default)
 
-  app.get("/tokens", getTokens);
+  app.get("/tokens", getSecrets);
   app.post("/token", postToken);
   app.delete("/token/:token", deleteToken);
 

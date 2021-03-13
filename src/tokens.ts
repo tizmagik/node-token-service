@@ -1,7 +1,7 @@
 import { decrypt, encrypt, generateKey } from "./encrypt";
+import { dbDelete, dbGet, dbSave } from "./storage";
 
-// poor man's DB
-const MEMORY_DB: { [token: string]: string } = {}; // token: key
+const TOKEN_PREFIX = "dp.token.";
 
 /**
  * Gets a secret from memory
@@ -9,17 +9,23 @@ const MEMORY_DB: { [token: string]: string } = {}; // token: key
  * @param token The token to retrieve a secret
  * @returns the secret as a string, or false if not found
  */
-export function getSecret(token: string): string | false {
+export async function getSecret(token: string): Promise<string> {
   let secret: string = "";
 
+  // Should we *only* accept tokens with the proper token prefix?
+  const rawToken = token.startsWith(TOKEN_PREFIX)
+    ? token.slice(TOKEN_PREFIX.length)
+    : token;
+
   try {
-    const key = MEMORY_DB[token];
-    secret = decrypt(token, key);
+    const key = await dbGet(token);
+    secret = decrypt(rawToken, key);
   } catch (e) {
+    // swallow errors
     console.error(e); // TODO: In practice maybe keep a metrics count on these
   }
 
-  return secret || false;
+  return secret;
 }
 
 /**
@@ -28,13 +34,11 @@ export function getSecret(token: string): string | false {
  * @param secret The secret to store
  * @returns {token} The token to be used later for retrieval
  */
-export function setSecret(secret: string): string {
+export async function setSecret(secret: string): Promise<string> {
   const key = generateKey();
-  const token = encrypt(secret, key);
+  const token = TOKEN_PREFIX + encrypt(secret, key);
 
-  MEMORY_DB[token] = key;
-
-  return token;
+  return dbSave(token, key);
 }
 
 /**
@@ -43,5 +47,5 @@ export function setSecret(secret: string): string {
  * @param token The token for the secret to be deleted
  */
 export function deleteSecret(token: string) {
-  delete MEMORY_DB[token];
+  return dbDelete(token);
 }

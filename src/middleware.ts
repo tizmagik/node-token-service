@@ -9,6 +9,9 @@ interface TokensGetResponse {
 }
 
 /**
+ * Retrieves secret(s) for given token(s)
+ * Any not found will just fall off from response silently
+ *
  * GET /tokens?t=(TOKEN1),(TOKEN2)
  *
  * Response:
@@ -21,7 +24,7 @@ interface TokensGetResponse {
  * @param res Express response
  * @returns {void} Ends middleware chain
  */
-export function getTokens(req: Request, res: Response): void {
+export async function getSecrets(req: Request, res: Response): Promise<void> {
   if (!req.query["t"]) return res.sendStatus(400).end();
 
   const tokenQuery = req.query["t"];
@@ -33,10 +36,15 @@ export function getTokens(req: Request, res: Response): void {
     }
 
     const response: TokensGetResponse = {};
-    for (const token of tokens) {
-      const secret = getSecret(token);
-      if (secret) response[token] = secret;
-    }
+
+    const getAllSecrets = tokens.map((token) => getSecret(token));
+    const settledSecrets = await Promise.allSettled(getAllSecrets);
+
+    settledSecrets.forEach((settled, idx) => {
+      if (settled.status === "fulfilled" && settled.value) {
+        response[tokens[idx]] = settled.value;
+      }
+    });
 
     return res.json(response).end();
   }
@@ -52,12 +60,12 @@ export function getTokens(req: Request, res: Response): void {
  * @param res Express response
  * @returns {void} Ends middleware chain
  */
-export function postToken(req: Request, res: Response): void {
+export async function postToken(req: Request, res: Response): Promise<void> {
   if (!req.body?.secret) {
     return res.sendStatus(400).end();
   }
 
-  const token = setSecret(req.body.secret);
+  const token = await setSecret(req.body.secret);
   return res.json({ token }).end();
 }
 

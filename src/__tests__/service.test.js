@@ -59,5 +59,17 @@ describe("service", () => {
         expect(e.response.data).toBe("Max of 100 tokens per request");
       }
     });
+
+    it("Does not bulbble up token retrieval errors to user", async () => {
+      const response = await axios.get(url("tokens"), {
+        params: {
+          t: "bogus,tokens,that,don't,exist",
+        },
+      });
+
+      expect(response).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.data).toStrictEqual({});
+    });
   });
 });
