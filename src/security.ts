@@ -41,5 +41,5 @@ export const rateLimit = RateLimit({
 
 export const cors = Cors({
   origin: `http://localhost`, // this would also need prod origins
-  allowedHeaders: ["content-type"], //
+  allowedHeaders: ["content-type"], // browsers send other headers, will need to include here (out of scope)
 });
