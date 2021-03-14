@@ -29,6 +29,7 @@ npm run test # in another terminal
 - Content-type sanity checking
 - Security header best-practices (via `helmet`)
 - Catching and exiting process on `uncaughtException` and `unhandledRejection`
+- Activity logging
 - For future: Since a webapp frontend isn't in scope for this project, haven't yet added anti-CSRF
 
 ---

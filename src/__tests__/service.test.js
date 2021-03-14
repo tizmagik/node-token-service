@@ -86,7 +86,10 @@ describe("service", () => {
       try {
         await axios.get(url("tokens"), {
           params: {
-            t: new Array(100 + 1).fill(Math.random()).join(","),
+            t: new Array(100 + 1)
+              .fill()
+              .map(() => Math.round(Math.random() * 10000))
+              .join(","),
           },
         });
       } catch (e) {

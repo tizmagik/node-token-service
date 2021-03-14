@@ -1,5 +1,6 @@
 import express from "express";
 import type { Server } from "http";
+import morgan from "morgan";
 import helmet from "helmet";
 import {
   getSecrets,
@@ -23,6 +24,8 @@ export async function server(): Promise<Server> {
   app.use(rateLimit);
   // best-practice security headers via helmet
   app.use(helmet());
+  // activity logging
+  app.use(morgan("tiny"));
 
   // request size limit for simple url-encoded reqeusts
   app.use(express.urlencoded({ extended: true, limit: "10kb" }));
