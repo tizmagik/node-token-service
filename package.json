@@ -5,8 +5,8 @@
   "keywords": [],
   "license": "ISC",
   "author": "Jeremy Gayed (https://github.com/tizmagik)",
-  "main": "build/index.js",
   "type": "module",
+  "main": "build/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",
     "start": "tsc && node build/index.js",
@@ -14,15 +14,17 @@
     "test:watch": "npm t -- --watch"
   },
   "dependencies": {
-    "@types/jest": "26.0.20",
+    "cors": "2.8.5",
     "express": "4.17.1",
     "express-rate-limit": "5.2.6",
     "helmet": "4.4.1"
   },
   "devDependencies": {
     "@tsconfig/node14": "1.0.0",
+    "@types/cors": "2.8.10",
     "@types/express": "4.17.11",
     "@types/express-rate-limit": "5.1.1",
+    "@types/jest": "26.0.20",
     "@types/node": "14.14.34",
     "axios": "0.21.1",
     "jest": "26.6.3",

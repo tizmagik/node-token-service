@@ -1,8 +1,4 @@
-/**
- * @jest-environment node
- */
 // @ts-check
-
 import axios from "axios";
 
 const SERVICE_URL = `http://localhost:${process.env.PORT || "8080"}`;
@@ -47,6 +43,44 @@ describe("service", () => {
   });
 
   describe("error cases", () => {
+    it("Blocks unsupported content-types", async () => {
+      expect.assertions(1);
+      try {
+        await axios.post(
+          url("token"),
+          {},
+          {
+            headers: {
+              "content-type": "foo/bar",
+            },
+          }
+        );
+      } catch (e) {
+        expect(e.response.data).toContain(
+          "Error Invalid or no content-type specified: foo/bar"
+        );
+      }
+    });
+
+    it("Blocks requests with unrecognized headers", async () => {
+      expect.assertions(1);
+      try {
+        await axios.post(
+          url("token"),
+          {
+            secret: "my-blocked-secret",
+          },
+          {
+            headers: {
+              "not-allowed": "nope",
+            },
+          }
+        );
+      } catch (e) {
+        expect(e.stack).toContain("Error: Network Error");
+      }
+    });
+
     it("Does not allow more than 10 token GETs per request", async () => {
       expect.assertions(1);
       try {

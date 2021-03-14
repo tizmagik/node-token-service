@@ -7,7 +7,7 @@ import {
   deleteToken,
   errorHandling,
 } from "./middleware";
-import { checkContentType, rateLimit } from "./security";
+import { checkContentType, rateLimit, cors } from "./security";
 
 export async function server(): Promise<Server> {
   const { PORT = "8080" } = process.env;
@@ -15,6 +15,8 @@ export async function server(): Promise<Server> {
   const app = express();
   app.disable("etag").disable("x-powered-by");
 
+  // restrict cross-origin requests
+  app.use(cors);
   // content-type sanity check
   app.use(checkContentType);
   // reate-limiting: Ideally this is done at the infra-level, not app-level

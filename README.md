@@ -7,7 +7,7 @@ Token exchange service.
 Service runs on `http://localhost:PORT` with 8080 as default
 
 ```
-nvm use # node 14 expected, but should work with others (.nvmrc)
+nvm use # node 14 expected (see .nvmrc); <14 would work with minimal syntax tweaks
 
 npm install
 npm run dev # or npm start
@@ -29,7 +29,7 @@ npm run test # in another terminal
 - Content-type sanity checking
 - Security header best-practices (via `helmet`)
 - Catching and exiting process on `uncaughtException` and `unhandledRejection`
-- For future: Since a webapp frontend isn't in scope for this project, `CORS` and Anti-CSRF haven't been added
+- For future: Since a webapp frontend isn't in scope for this project, haven't yet added anti-CSRF
 
 ---
 
